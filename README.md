@@ -133,9 +133,6 @@ I've also developed a trading bot for Polymarket built with **Rust**.
 <img width="1917" height="942" alt="image (21)" src="https://github.com/user-attachments/assets/08a5c962-7f8b-4097-98b6-7a457daa37c9" />
 https://www.youtube.com/watch?v=4f6jHT4-DQs
 
-Demo: https://www.youtube.com/watch?v=qgdRd8X-oHM <br />
-There is executable file in my repo.
-
 **Disclaimer:** This software is for educational purposes only. Trading involves risk of loss. The developers are not responsible for any financial losses incurred while using this bot.
 
 **Support:** For questions or issues, contact via Telegram: [@Vladmeer](https://t.me/vladmeer67) or Twitter: [@Vladmeer](https://x.com/vladmeer67)
