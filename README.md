@@ -70,8 +70,8 @@ The bot currently uses the **Polymarket Data API** to monitor trader activity an
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `USER_ADDRESSES` | Traders to copy (comma-separated) | `'0xABC..., 0xDEF...'` |
-| `PROXY_WALLET` | Your Polygon wallet address | `'0x123...'` |
-| `PRIVATE_KEY` | Wallet private key (no 0x prefix) | `'abc123...'` |
+| `PROXY_WALLET` | Your Polymarket wallet address | `'0x123...'` |
+| `PRIVATE_KEY` | Wallet private key | `'abc123...'` |
 | `MONGO_URI` | MongoDB connection string | `'mongodb+srv://...'` |
 | `RPC_URL` | Polygon RPC endpoint | `'https://polygon...'` |
 | `TRADE_MULTIPLIER` | Position size multiplier (default: 1.0) | `2.0` |
