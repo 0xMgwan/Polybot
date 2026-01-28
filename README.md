@@ -121,7 +121,7 @@ This version has more advanced features than version 1 and is a truly profitable
 ✅ **Finding the Best Traders**  
 
 <img width="680" height="313" alt="image (19)" src="https://github.com/user-attachments/assets/d868f9f2-a1dd-4bfe-a76e-d8cbdfbd8497" />
-
+https://github.com/user-attachments/assets/a882e545-18ce-4d47-a937-19eb7bd89784
 There are several versions, including **TypeScript**, **Python**, and **Rust**.
 ## Trading tool
 
@@ -129,10 +129,6 @@ I've also developed a trading bot for Polymarket built with **Rust**.
 
 <img width="1917" height="942" alt="image (21)" src="https://github.com/user-attachments/assets/08a5c962-7f8b-4097-98b6-7a457daa37c9" />
 https://www.youtube.com/watch?v=4f6jHT4-DQs
-
-
-https://github.com/user-attachments/assets/a882e545-18ce-4d47-a937-19eb7bd89784
-
 
 ## Recommend VPS
 
