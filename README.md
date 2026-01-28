@@ -130,6 +130,10 @@ I've also developed a trading bot for Polymarket built with **Rust**.
 <img width="1917" height="942" alt="image (21)" src="https://github.com/user-attachments/assets/08a5c962-7f8b-4097-98b6-7a457daa37c9" />
 https://www.youtube.com/watch?v=4f6jHT4-DQs
 
+
+https://github.com/user-attachments/assets/a882e545-18ce-4d47-a937-19eb7bd89784
+
+
 ## Recommend VPS
 
 Vps: [@TradingVps](https://app.tradingvps.io/aff.php?aff=57)
