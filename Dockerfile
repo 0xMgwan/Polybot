@@ -2,14 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY package.json package-lock.json ./
-
-# Install all dependencies (need devDependencies for build)
-RUN npm install
-
-# Copy source code
+# Copy all source files first (postinstall script needs them)
 COPY . .
+
+# Install all dependencies (including devDependencies for TypeScript build)
+RUN npm install
 
 # Build TypeScript
 RUN npm run build
