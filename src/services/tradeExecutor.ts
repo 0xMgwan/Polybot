@@ -160,21 +160,18 @@ const doTrading = async (clobClient: ClobClient, trades: TradeWithUser[]) => {
             transactionHash: trade.transactionHash,
         });
 
-        const my_positions: UserPositionInterface[] = await fetchData(
-            `https://data-api.polymarket.com/positions?user=${PROXY_WALLET}`
-        );
-        const user_positions: UserPositionInterface[] = await fetchData(
-            `https://data-api.polymarket.com/positions?user=${trade.userAddress}`
-        );
+        // Fetch positions and balance in parallel for faster execution
+        const [my_positions, user_positions, my_balance] = await Promise.all([
+            fetchData(`https://data-api.polymarket.com/positions?user=${PROXY_WALLET}`) as Promise<UserPositionInterface[]>,
+            fetchData(`https://data-api.polymarket.com/positions?user=${trade.userAddress}`) as Promise<UserPositionInterface[]>,
+            getMyBalance(PROXY_WALLET),
+        ]);
         const my_position = my_positions.find(
             (position: UserPositionInterface) => position.conditionId === trade.conditionId
         );
         const user_position = user_positions.find(
             (position: UserPositionInterface) => position.conditionId === trade.conditionId
         );
-
-        // Get USDC balance
-        const my_balance = await getMyBalance(PROXY_WALLET);
 
         // Calculate trader's total portfolio value from positions
         const user_balance = user_positions.reduce((total, pos) => {
@@ -216,21 +213,18 @@ const doAggregatedTrading = async (clobClient: ClobClient, aggregatedTrades: Agg
             await UserActivity.updateOne({ _id: trade._id }, { $set: { botExcutedTime: 1 } });
         }
 
-        const my_positions: UserPositionInterface[] = await fetchData(
-            `https://data-api.polymarket.com/positions?user=${PROXY_WALLET}`
-        );
-        const user_positions: UserPositionInterface[] = await fetchData(
-            `https://data-api.polymarket.com/positions?user=${agg.userAddress}`
-        );
+        // Fetch positions and balance in parallel for faster execution
+        const [my_positions, user_positions, my_balance] = await Promise.all([
+            fetchData(`https://data-api.polymarket.com/positions?user=${PROXY_WALLET}`) as Promise<UserPositionInterface[]>,
+            fetchData(`https://data-api.polymarket.com/positions?user=${agg.userAddress}`) as Promise<UserPositionInterface[]>,
+            getMyBalance(PROXY_WALLET),
+        ]);
         const my_position = my_positions.find(
             (position: UserPositionInterface) => position.conditionId === agg.conditionId
         );
         const user_position = user_positions.find(
             (position: UserPositionInterface) => position.conditionId === agg.conditionId
         );
-
-        // Get USDC balance
-        const my_balance = await getMyBalance(PROXY_WALLET);
 
         // Calculate trader's total portfolio value from positions
         const user_balance = user_positions.reduce((total, pos) => {
