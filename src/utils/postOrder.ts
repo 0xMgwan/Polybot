@@ -60,6 +60,7 @@ const tryAutoRedeem = async (conditionId: string): Promise<boolean> => {
 
 const RETRY_LIMIT = ENV.RETRY_LIMIT;
 const COPY_STRATEGY_CONFIG = ENV.COPY_STRATEGY_CONFIG;
+const MAX_SLIPPAGE_PERCENT = ENV.MAX_SLIPPAGE_PERCENT;
 
 // Legacy parameters (for backward compatibility in SELL logic)
 const TRADE_MULTIPLIER = ENV.TRADE_MULTIPLIER;
@@ -246,6 +247,27 @@ const postOrder = async (
             }
             await UserActivity.updateOne({ _id: trade._id }, { bot: true });
             return;
+        }
+
+        // Check slippage before executing - skip if market has moved too far from trader's entry
+        const orderBook = await clobClient.getOrderBook(trade.asset);
+        if (orderBook.asks && orderBook.asks.length > 0) {
+            const currentBestAsk = parseFloat(orderBook.asks[0].price);
+            const traderEntryPrice = trade.price;
+            const slippagePercent = ((currentBestAsk - traderEntryPrice) / traderEntryPrice) * 100;
+            
+            Logger.info(`📊 Slippage check: Trader entered at $${traderEntryPrice.toFixed(4)}, current ask: $${currentBestAsk.toFixed(4)} (${slippagePercent.toFixed(2)}%)`);
+            
+            if (slippagePercent > MAX_SLIPPAGE_PERCENT) {
+                Logger.warning(
+                    `⚠️  SKIPPING TRADE: Market slippage ${slippagePercent.toFixed(2)}% exceeds max ${MAX_SLIPPAGE_PERCENT}%`
+                );
+                Logger.warning(
+                    `💡 Market moved too far from trader's entry. Wait for better prices or increase MAX_SLIPPAGE_PERCENT in .env`
+                );
+                await UserActivity.updateOne({ _id: trade._id }, { bot: true });
+                return;
+            }
         }
 
         let remaining = orderCalc.finalAmount;
