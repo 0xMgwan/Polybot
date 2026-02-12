@@ -3,6 +3,7 @@ import { ENV } from './config/env';
 import createClobClient from './utils/createClobClient';
 import tradeExecutor, { stopTradeExecutor } from './services/tradeExecutor';
 import tradeMonitor, { stopTradeMonitor } from './services/tradeMonitor';
+import wsTradeMonitor, { stopWsTradeMonitor } from './services/wsTradeMonitor';
 import Logger from './utils/logger';
 import { performHealthCheck, logHealthCheck } from './utils/healthCheck';
 
@@ -25,6 +26,7 @@ const gracefulShutdown = async (signal: string) => {
     try {
         // Stop services
         stopTradeMonitor();
+        stopWsTradeMonitor();
         stopTradeExecutor();
 
         // Give services time to finish current operations
@@ -91,8 +93,8 @@ export const main = async () => {
         Logger.success('CLOB client ready');
 
         Logger.separator();
-        Logger.info('Starting trade monitor...');
-        tradeMonitor();
+        Logger.info('Starting WebSocket trade monitor (real-time)...');
+        wsTradeMonitor();
 
         Logger.info('Starting trade executor...');
         tradeExecutor(clobClient);
