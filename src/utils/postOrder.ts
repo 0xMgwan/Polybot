@@ -250,9 +250,9 @@ const postOrder = async (
         }
 
         // Check slippage before executing - skip if market has moved too far from trader's entry
-        const orderBook = await clobClient.getOrderBook(trade.asset);
-        if (orderBook.asks && orderBook.asks.length > 0) {
-            const currentBestAsk = parseFloat(orderBook.asks[0].price);
+        let initialOrderBook = await clobClient.getOrderBook(trade.asset);
+        if (initialOrderBook.asks && initialOrderBook.asks.length > 0) {
+            const currentBestAsk = parseFloat(initialOrderBook.asks[0].price);
             const traderEntryPrice = trade.price;
             const slippagePercent = ((currentBestAsk - traderEntryPrice) / traderEntryPrice) * 100;
             
@@ -277,7 +277,8 @@ const postOrder = async (
         let totalBoughtTokens = 0; // Track total tokens bought for this trade
 
         while (remaining > 0 && retry < RETRY_LIMIT) {
-            const orderBook = await clobClient.getOrderBook(trade.asset);
+            // Reuse initial order book on first iteration, fetch fresh on retries
+            let orderBook = retry === 0 ? initialOrderBook : await clobClient.getOrderBook(trade.asset);
             if (!orderBook.asks || orderBook.asks.length === 0) {
                 Logger.warning('No asks available in order book');
                 await UserActivity.updateOne({ _id: trade._id }, { bot: true });

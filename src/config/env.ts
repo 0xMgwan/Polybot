@@ -80,10 +80,10 @@ const validateAddresses = (): void => {
  * Validate numeric configuration values
  */
 const validateNumericConfig = (): void => {
-    const fetchInterval = parseInt(process.env.FETCH_INTERVAL || '1', 10);
+    const fetchInterval = parseFloat(process.env.FETCH_INTERVAL || '1');
     if (isNaN(fetchInterval) || fetchInterval <= 0) {
         throw new Error(
-            `Invalid FETCH_INTERVAL: ${process.env.FETCH_INTERVAL}. Must be a positive integer.`
+            `Invalid FETCH_INTERVAL: ${process.env.FETCH_INTERVAL}. Must be a positive number (in seconds).`
         );
     }
 
@@ -328,7 +328,7 @@ export const ENV = {
     PRIVATE_KEY: process.env.PRIVATE_KEY as string,
     CLOB_HTTP_URL: process.env.CLOB_HTTP_URL as string,
     CLOB_WS_URL: process.env.CLOB_WS_URL as string,
-    FETCH_INTERVAL: parseInt(process.env.FETCH_INTERVAL || '1', 10),
+    FETCH_INTERVAL: parseFloat(process.env.FETCH_INTERVAL || '1'),
     TOO_OLD_TIMESTAMP: parseInt(process.env.TOO_OLD_TIMESTAMP || '24', 10),
     RETRY_LIMIT: parseInt(process.env.RETRY_LIMIT || '3', 10),
     // Legacy parameters (kept for backward compatibility)
