@@ -5,7 +5,6 @@ import { UserActivityInterface, UserPositionInterface } from '../interfaces/User
 import { getUserActivityModel } from '../models/userHistory';
 import Logger from './logger';
 import { calculateOrderSize, getTradeMultiplier } from '../config/copyStrategy';
-import { getCachedOrderBook } from '../services/wsTradeMonitor';
 
 // Auto-redeem constants for resolved markets
 const CTF_CONTRACT_ADDRESS = '0x4D97DCd97eC945f40cF65F87097ACe5EA0476045';
@@ -251,14 +250,7 @@ const postOrder = async (
         }
 
         // Check slippage before executing - skip if market has moved too far from trader's entry
-        // Try WebSocket cached order book first for instant access, fallback to API
-        const cachedOB = getCachedOrderBook(trade.asset, 3000);
-        let initialOrderBook = cachedOB
-            ? { asks: cachedOB.asks, bids: cachedOB.bids }
-            : await clobClient.getOrderBook(trade.asset);
-        if (cachedOB) {
-            Logger.info('⚡ Using WebSocket cached order book (instant)');
-        }
+        let initialOrderBook = await clobClient.getOrderBook(trade.asset);
         if (initialOrderBook.asks && initialOrderBook.asks.length > 0) {
             const currentBestAsk = parseFloat(initialOrderBook.asks[0].price);
             const traderEntryPrice = trade.price;
