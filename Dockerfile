@@ -5,6 +5,9 @@ WORKDIR /app
 # Copy all source files first (postinstall script needs them)
 COPY . .
 
+# Set CI environment variable to skip postinstall messages
+ENV CI=true
+
 # Install all dependencies (including devDependencies for TypeScript build)
 RUN npm install
 
